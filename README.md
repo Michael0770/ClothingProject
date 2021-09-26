@@ -33,5 +33,5 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 demo screenshot:
 
-![image](https://user-images.githubusercontent.com/21092378/134799259-be428339-9f74-4054-8def-a661eb9ca8fe.png)
+![image](https://user-images.githubusercontent.com/21092378/134799323-8a2c4ec9-e907-43d2-bac3-d3e9c0fc445c.png)
 
