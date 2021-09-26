@@ -1,6 +1,6 @@
 <div class="row mt-5">
     <div class="col-md-12 mb-5">
-        <button class="btn btn-success pull-right" data-toggle="modal" data-target="#createProduct">Add Product</button>
+        <button class="btn btn-success pull-right" data-toggle="modal" data-target="#createProduct" (click)="AddNewProduct()">Add Product</button>
     </div>
     <div class="col-md-12">
         <table class="table table-bordered table-strip">
@@ -114,14 +114,14 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title w-100" id="exampleModalLabel2">Add Edit Product</h4>
+                <h4 class="modal-title w-100" id="exampleModalLabel2">{{heading}}</h4>
                 <button type="button" #closeModal class="close pull-right" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
             <div class="modal-body">
                 <form [formGroup]="createProductForm" (ngSubmit)="addProduct(createProductForm.value)">
-                    <div class="row">
+                    <div class="row" *ngIf="isEdit==true">
                         <div class="col-md-1"></div>
                         <div class="col-md-3">
                             <label for="custNameIDD"> Product Id</label>

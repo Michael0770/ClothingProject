@@ -22,6 +22,8 @@ export class ProductlistComponent implements OnInit {
   dropdownSettings:IDropdownSettings = {};
   selectedProductIds:[];
   list: product[] = [];
+  isEdit:boolean=false;
+  heading:string='';
 
   constructor(public service: ProductListService,
     private toastr: ToastrService, private formBuilder: FormBuilder) {
@@ -81,7 +83,7 @@ export class ProductlistComponent implements OnInit {
   }
 
   addProduct(formData: product): void {
-    debugger;
+    
     if (this.createProductForm.valid) {
       this.service.formData.id = formData.id;
       this.service.formData.productName = formData.productName;
@@ -89,7 +91,7 @@ export class ProductlistComponent implements OnInit {
       this.service.formData.description = formData.description;
       this.service.formData.base = formData.base;
       this.service.formData.relatedProductIds = '';
-      this.service.formData.relatedProducts = formData.selectedProducts;
+      this.service.formData.relatedProducts = formData.selectedProducts != null ? formData.selectedProducts : [];
       this.service.formData.relatedProductsSelected=[];
       if (formData.id > 0)
         this.service.updateProductDetails().subscribe(res => {
@@ -136,7 +138,8 @@ export class ProductlistComponent implements OnInit {
 
   editProduct(id: number) {
     this.service.getById(id).subscribe((res: product) => {
-      debugger;
+      this.isEdit=true;
+      this.heading = "Edit Product";
       this.createProductForm.patchValue({
         id: res.id,
         productName: res.productName,
@@ -147,11 +150,22 @@ export class ProductlistComponent implements OnInit {
         relatedProducts:res.relatedProducts,
         selectedProducts:res.relatedProducts
       });
-      // this.createProductForm.setValue() = res.base;
-      // this.productDescription = res.description;
-      // this.productName = res.productName;
-      // this.productPrice = res.price;
-      // this.productId = res.id;
+     
+    });
+  }
+
+  AddNewProduct(){
+    this.isEdit=false;
+    this.heading = "Add Product";
+    this.createProductForm.patchValue({
+      id: 0,
+      productName: '',
+      base: '',
+      price: 0,
+      description: '',
+      relatedProductIds: '',
+      relatedProducts:[],
+      selectedProducts:[]
     });
   }
 
@@ -163,23 +177,21 @@ export class ProductlistComponent implements OnInit {
       if (errors === null || errors.count === 0) {
         return;
       }
-      // Handle the 'required' case
+      
       if (errors.required) {
         this.errors.push(`${field} is required`);
       }
-      // Handle 'minlength' case
+      
       if (errors.minlength) {
         this.errors.push(`${field} minimum length is ${errors.minlength.requiredLength}.`);
       }
-      // Handle custom messages.
+      
       if (errors.message) {
         this.errors.push(`${field} ${errors.message}`);
       }
 
 
-      // const control = formGroup.get(field);
-      // control.markAsTouched({ onlySelf: true });
-      // control.markAsDirty({ onlySelf: true });
+     
     });
   }
 
