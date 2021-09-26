@@ -16,7 +16,7 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 ## Database and Backend Setup 
 
-Firstof all create database in MSSQL and then Open the Visual Studio and go to appsetting.json and set the your datbase connection in it. Put your database name , server name etc. And then run the miagraion by Package Manager Console by this command .  PM> add-migration
+Firstof all create database in MSSQL and then Open the Visual Studio and go to appsetting.json and set your datbase connection in it. Put your database name , server name etc. And then run the miagraion by Package Manager Console by this command .  PM> add-migration
 
 
 ## Running unit tests
