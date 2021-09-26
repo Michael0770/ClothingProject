@@ -1,0 +1,263 @@
+<div class="row mt-5">
+    <div class="col-md-12 mb-5">
+        <button class="btn btn-success pull-right" data-toggle="modal" data-target="#createProduct">Add Product</button>
+    </div>
+    <div class="col-md-12">
+        <table class="table table-bordered table-strip">
+            <thead class="thead-light">
+                <tr>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Description</th>
+                    <th>Base</th>
+                    <th>Price</th>
+                    <th>Related Products</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let pd of list">
+                    <td>{{pd.id}}</td>
+                    <td>{{pd.productName}}</td>
+                    <td>{{pd.description}}</td>
+                    <td>{{pd.base}}</td>
+                    <td>{{pd.price}}</td>
+                    <td>
+                        <button class="btn btn-success btn-sm mr-1" *ngFor="let item of pd.relatedProductsSelected" data-toggle="modal"
+                            data-target="#exampleModal2" (click)="getProductById(item.productId)">{{item.name}}</button>
+                    </td>
+                    <td>
+                        <button data-toggle="modal" data-target="#createProduct" class="btn btn-success btn-sm mr-2"
+                            (click)="editProduct(pd.id)"><i class="fa fa-pencil-square-o"
+                                aria-hidden="true"></i></button>
+                        <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal2"
+                            (click)="populateForm(pd)"><i class="fa fa-eye"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title w-100" id="exampleModalLabel2">Product Summary</h4>
+                <button type="button" #closeModal class="close pull-right" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form">
+                    <div class="row">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-4">
+                            <label for="custNameIDD"> Product Id</label>
+                        </div>
+                        <div class="col-md-4">
+                            <p id="custNameIDD">{{ productId}}</p>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-4">
+                            <label for="custNameIDD"> Product Name</label>
+                        </div>
+                        <div class="col-md-4">
+                            <p id="custNameIDD">{{ productName}}</p>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-4">
+                            <label for="balanceIDD"> Description</label>
+                        </div>
+                        <div class="col-md-4">
+                            <p id="balanceIDD">
+                                {{productDescription}}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-4">
+                            <label for="prodBase"> Base</label>
+                        </div>
+                        <div class="col-md-7">
+                            <p id="prodBase">{{productBase}}</p>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-4">
+                            <label for="ATDIDD"> Price</label>
+                        </div>
+                        <div class="col-md-7">
+                            <p id="ATDIDD">{{productPrice}}</p>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="createProduct" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title w-100" id="exampleModalLabel2">Add Edit Product</h4>
+                <button type="button" #closeModal class="close pull-right" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="createProductForm" (ngSubmit)="addProduct(createProductForm.value)">
+                    <div class="row">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-3">
+                            <label for="custNameIDD"> Product Id</label>
+                        </div>
+                        <div class="col-md-7"> 
+                            <input type="text" id="id" formControlName="id" placeholder="id" class="form-control"
+                                readonly>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-3">
+                            <label for="custNameIDD"> Product Name</label>
+                        </div>
+                        <div class="col-md-7">
+                            <input type="text" id="productName" formControlName="productName" placeholder="product Name"
+                                class="form-control">
+
+                            <div *ngIf="createProductForm.get('productName')?.invalid && (createProductForm.get('productName')?.dirty || createProductForm.get('productName')?.touched)"
+                                class="text-danger error-msg col-md-7">
+                                <div *ngIf="createProductForm.get('productName')?.errors?.required">
+                                    <span><b>Product name</b> is required</span>
+                                </div>
+                                <div *ngIf="createProductForm.get('productName')?.errors?.minlength">
+                                    <b>Product name</b> must be at least 3 characters long.
+                                </div>
+                                <!-- <div class="col-md-7 mt-3">
+                    <div *ngIf="createPlayerForm.get('password').invalid && (createPlayerForm.get('password').touched || createPlayerForm.get('password').dirty)"
+                      class="text-danger error-msg">
+                      <span><b>Password</b> is required</span>
+                    </div>
+                  </div> -->
+                            </div>
+                        </div>
+                        <!-- <div class="col-md-4"></div> -->
+
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-3">
+                            <label for="balanceIDD"> Description</label>
+                        </div>
+                        <div class="col-md-7">
+                            <textarea class="form-control" id="description" rows="3" formControlName="description"
+                                placeholder="product Description"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-3">
+                            <label for="prodBase"> Base</label>
+                        </div>
+                        <div class="col-md-7">
+                            <input type="text" id="base" formControlName="base" placeholder="USD" class="form-control">
+                            <div *ngIf="createProductForm.get('base')?.invalid && (createProductForm.get('base')?.touched || createProductForm.get('base')?.dirty)"
+                                class="text-danger error-msg">
+                                <span><b>Base</b> is required</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-3">
+                            <label for="ATDIDD"> Price</label>
+                        </div>
+                        <div class="col-md-7">
+                            <input type="number" id="price" formControlName="price" placeholder="price"
+                                class="form-control">
+                            <div *ngIf="createProductForm.get('price')?.invalid && (createProductForm.get('price')?.touched || createProductForm.get('price')?.dirty)"
+                                class="text-danger error-msg">
+                                <span><b>Price</b> is required</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-3">
+                            <label for="ATDIDD"> Related Products</label>
+                        </div>
+                        <div class="col-md-7">
+                            <ng-multiselect-dropdown [placeholder]="'Please select'" [settings]="dropdownSettings"
+                                [data]="list" formControlName="selectedProducts" (onSelect)="onItemSelect($event)"
+                                (onSelectAll)="onSelectAll($event)">
+                            </ng-multiselect-dropdown>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-3">
+
+                        </div>
+                        <div class="col-md-7">
+                            <button type="submit" class="btn btn-primary">
+                                Save
+                            </button>
+                            <button type="button" class="btn" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- <div id="myModal" #validationModal="mdbModal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="myBasicModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close pull-right" aria-label="Close" (click)="validationModal.hide()">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title w-100" id="myModalLabel">Errors</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>Please fix the following errors:</p>
+                        <ul>
+                            <li *ngFor="let error of errors">{{ error }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" mdbBtn color="secondary" class="waves-light" aria-label="Close"
+                    (click)="validationModal.hide()" mdbWavesEffect>OK</button>
+            </div>
+        </div>
+
+    </div>
+</div> -->
